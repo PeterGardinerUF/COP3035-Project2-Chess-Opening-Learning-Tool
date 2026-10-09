@@ -11,7 +11,8 @@ int CoordinateToPosition(int x, int y) {
 Piece MakePiece(const PieceType type, int x, int y) {
     Piece piece;
     piece.type = type;
-    piece.positionIndex = CoordinateToPosition(x, y);
+    piece.x = x;
+    piece.y = y;
     piece.alive = true;
     return piece;
 }
