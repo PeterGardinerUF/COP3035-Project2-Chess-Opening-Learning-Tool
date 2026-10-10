@@ -1,9 +1,14 @@
 #include "renderer.hpp"
-#include "game.hpp"
-#include "raylib.h"
 
-Renderer::Renderer(Game* game) {
-    this->game = game;
+void Renderer::SetHighlighted(bool exists, int x, int y) {
+    highlightedExists = exists;
+    highlightedX = x;
+    highlightedY = y;
+}
+
+Renderer::Renderer(Board* board) {
+    this->board = board;
+    highlightedExists = false;
 }
 
 Renderer::~Renderer() {
@@ -48,8 +53,17 @@ void Renderer::Draw() const {
         DrawRectangle((i % 8) * squareSize, (i / 8) * squareSize, squareSize, squareSize, color);
     }
     
-    for (int i = 0; i < 32; i++) {
-        Piece piece = game->pieces[i];
-        DrawTexture(pieceTextures[piece.type], (piece.x - 1) * squareSize, (piece.y - 1) * squareSize, WHITE);
+    if (highlightedExists) {
+        Color color = PURPLE;
+        color.a = 128;
+        DrawRectangle(highlightedX * squareSize, (7 - highlightedY) * squareSize, squareSize, squareSize, color);
+    }
+    
+    for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
+            Piece piece = board->pieces[x][y];
+            if (piece == EMPTY) continue;
+            DrawTexture(pieceTextures[piece], x * squareSize, (7 - y) * squareSize, WHITE);
+        }
     }
 }

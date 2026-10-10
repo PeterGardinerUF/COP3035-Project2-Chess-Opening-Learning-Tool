@@ -1,11 +1,10 @@
 #pragma once
 #include <cstdint>
-#include <iostream>
 using namespace std;
 
 #define UNIQUE_PIECE_COUNT 12
 
-enum PieceType {
+enum Piece {
     WHITE_PAWN,
     WHITE_KNIGHT,
     WHITE_BISHOP,
@@ -18,6 +17,7 @@ enum PieceType {
     BLACK_ROOK,
     BLACK_QUEEN,
     BLACK_KING,
+    EMPTY,
 };
 
 enum PieceZobristHashValue : uint64_t {
@@ -36,21 +36,8 @@ enum PieceZobristHashValue : uint64_t {
 };
 
 typedef struct {
-    PieceType type;
-    int x;
-    int y;
-    bool alive;
-} Piece;
-
-typedef struct {
-    Piece pieces[32];
+    Piece pieces[8][8];
     bool whiteToPlay;
-} Game;
+} Board;
 
-int CoordinateToPosition(int x, int y);
-
-Piece MakePiece();
-
-Game InitialGame();
-
-const char* pieceSymbol(PieceType type);
+Board InitialGame();

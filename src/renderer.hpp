@@ -1,12 +1,16 @@
 #pragma once
-#include <iostream>
-#include "game.hpp"
 #include "raylib.h"
+#include "game.hpp"
 using namespace std;
+
+#define BOARD_SIZE_PIXELS 704
 
 class Renderer {
     
-    Game* game;
+    Board* board;
+    bool highlightedExists;
+    int highlightedX;
+    int highlightedY;
     
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
@@ -14,11 +18,13 @@ class Renderer {
     
     public:
     
-    const int width = 1408;
-    const int height = 704;
+    const int width = BOARD_SIZE_PIXELS * 2;
+    const int height = BOARD_SIZE_PIXELS;
     const int squareSize = height / 8;
     
-    Renderer(Game* game);
+    void SetHighlighted(bool exists, int x, int y);
+    
+    Renderer(Board* board);
     ~Renderer();
     
     void InitPieceTextures();
