@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include "renderer.hpp"
 #include "input.hpp"
-using namespace std;
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
 int main() {
@@ -22,10 +21,9 @@ int main() {
             break;
         }
         renderer.SetHighlighted(input.state == PIECE_SELECTED, input.selectedX, input.selectedY);
+        renderer.SetPieceToPlace(input.toPlace);
         
         BeginDrawing();
-            
-            ClearBackground(GRAY);
             
             renderer.Draw();
 

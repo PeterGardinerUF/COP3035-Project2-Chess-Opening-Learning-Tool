@@ -1,11 +1,13 @@
 #pragma once
+#include <algorithm>
 #include "raylib.h"
 #include "game.hpp"
-#include "renderer.hpp"
+using namespace std;
 
 enum InputState {
     DEFAULT,
     PIECE_SELECTED,
+    PLACE_MODE,
 };
 
 typedef struct {
@@ -13,6 +15,7 @@ typedef struct {
     bool endProgram;
     int selectedX;
     int selectedY;
+    Piece toPlace;
 } Input;
 
 typedef struct {

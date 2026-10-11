@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-using namespace std;
 
 #define UNIQUE_PIECE_COUNT 12
 

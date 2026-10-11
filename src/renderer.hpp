@@ -1,7 +1,6 @@
 #pragma once
 #include "raylib.h"
 #include "game.hpp"
-using namespace std;
 
 #define BOARD_SIZE_PIXELS 704
 
@@ -11,6 +10,7 @@ class Renderer {
     bool highlightedExists;
     int highlightedX;
     int highlightedY;
+    Piece toPlace;
     
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
@@ -23,6 +23,7 @@ class Renderer {
     const int squareSize = height / 8;
     
     void SetHighlighted(bool exists, int x, int y);
+    void SetPieceToPlace(Piece piece);
     
     Renderer(Board* board);
     ~Renderer();
