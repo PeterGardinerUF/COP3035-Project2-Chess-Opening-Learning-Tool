@@ -15,6 +15,7 @@ class Renderer {
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
     void InitTexture(Texture2D& texture, const char* filePath) const;
+    const int fontSize = 44;
     
     public:
     

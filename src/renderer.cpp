@@ -82,4 +82,13 @@ void Renderer::Draw() const {
         texture.height /= 2;
         DrawTexture(texture, BOARD_SIZE_PIXELS + i * buttonSize, 0, WHITE);
     }
+    
+    int playerButtonX = BOARD_SIZE_PIXELS;
+    int playerButtonY = buttonSize;
+    DrawRectangle(playerButtonX, playerButtonY, 300, fontSize, GRAY);
+    if (board->whiteToPlay) {
+        DrawText("White to play", playerButtonX, playerButtonY, fontSize, WHITE);
+    } else {
+        DrawText("Black to play", playerButtonX, playerButtonY, fontSize, BLACK);
+    }
 }
