@@ -1,14 +1,17 @@
 #include <vector>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 struct TrieNode {
     string move; // Represents the move made as a string (e.g. e4)
-    bool isWhite = true; // Keeps track of which color made the move
+    // bool isWhite = true; // Keeps track of which color made the move
     int whiteWins = 0; // Keeps track of how many times white won the game after reaching this position
     int blackWins = 0; // Keeps track of how many times black won the game after reaching this position
-    int draws = 0; // Keeps track of ho many games ended in a draw after reaching this position
-    vector<int> children; // A list of indicies of the child nodes
+    int draws = 0; // Keeps track of how many games ended in a draw after reaching this position
+    vector<int> children; // A list of indices of the child nodes
 };
 
 class Trie {
@@ -44,15 +47,75 @@ public:
             }
         }
         // Next move does not exist, so add it to the trie
-        Node n;
+        TrieNode n;
         n.move = move;
         nodes.push_back(n);
-        int index = nodes.size() - 1;
+        int index = (int)(nodes.size() - 1);
         nodes[parent].children.push_back(index); // Adds the index of the new move to the parent's "children vector"
         return index;
     }
 
-private:
-    pass;
+    // Finds the index of the last move in the sequence if it exists, otherwise returns -1
+    int find(const vector<string>& moves) const {
+        int current = 0;
+        for (const string& move : moves) {
+            int next = -1;
+            for (int childIndex : nodes[current].children) {
+                if (nodes[childIndex].move == move) {
+                    next = childIndex;
+                    break;
+                }
+            }
+            if (next == -1) {
+                return -1; // Move not found in trie
+            }
+            current = next;
+        }
+        return current; // Return the index of the last move in the sequence
+    }
 
+    // Prints the next known moves from the current position, along with their statistics
+    void printNextMoves(const vector<string>& moves) const {
+        int currentIndex = find(moves);
+        if (currentIndex == -1) {
+            cout << "Position not found." << endl;
+            return;
+        }
+        for (int childIndex : nodes[currentIndex].children) {
+            const TrieNode& childNode = nodes[childIndex];
+            cout << "Move: " << childNode.move << ", White Wins: " << childNode.whiteWins
+                 << ", Black Wins: " << childNode.blackWins << ", Draws: " << childNode.draws << endl;
+        }
+    }
 };
+
+// Loads games from a file into the trie. Each line in the file should represent a game in the format:
+// result move1 move2 move3 ...
+void loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
+    ifstream in(filepath);
+    string line;
+    int count = 0;
+    while (count < maxGames && getline(in, line)) {
+        istringstream ss(line);
+        string res, tok;
+        ss >> res;
+        int result;
+        if (res == "1-0") {
+            result = 1;
+        } else if (res == "0-1") {
+            result = -1;
+        } else if (res == "1/2-1/2") {
+            result = 0;
+        } else {
+            continue; // Skip invalid results
+        }
+
+        vector<string> moves;
+        while ((int)moves.size() < maxPly && ss >> tok) {
+            moves.push_back(tok);
+        }
+
+        trie.insert(moves, result);
+        count++;
+    }
+}
