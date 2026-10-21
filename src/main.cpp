@@ -1,21 +1,22 @@
-#include "game.hpp"
+#include "board.hpp"
 #include "renderer.hpp"
 #include "input.hpp"
+#include "hash_map.hpp"
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
 int main() {
     
-    Board game = InitialGame();
-    Renderer renderer(&game);
+    Board board = InitialBoard();
+    Renderer renderer(&board);
     InitWindow(renderer.width, renderer.height, "Chess Opening Learning Tool");
     SetExitKey(KEY_NULL);
     renderer.InitPieceTextures();
-
+    
     SetTargetFPS(30);
     Input input = InitialInput();
     while (!WindowShouldClose()) {
         
-        HandleInput(game, input, BOARD_SIZE_PIXELS);
+        HandleInput(board, input, BOARD_SIZE_PIXELS);
         if (input.endProgram) {
             break;
         }

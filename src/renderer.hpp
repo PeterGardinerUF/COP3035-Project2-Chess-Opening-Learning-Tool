@@ -1,6 +1,6 @@
 #pragma once
 #include "raylib.h"
-#include "game.hpp"
+#include "board.hpp"
 
 #define BOARD_SIZE_PIXELS 704
 
@@ -30,6 +30,8 @@ class Renderer {
     ~Renderer();
     
     void InitPieceTextures();
+    
+    void DrawBoard(int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
     
     void Draw() const;
     

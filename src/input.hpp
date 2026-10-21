@@ -1,7 +1,7 @@
 #pragma once
 #include <algorithm>
 #include "raylib.h"
-#include "game.hpp"
+#include "board.hpp"
 using namespace std;
 
 enum InputState {

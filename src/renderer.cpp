@@ -41,8 +41,6 @@ void Renderer::InitPieceTextures() {
     
     for (int i = 0; i < UNIQUE_PIECE_COUNT; i++) {
         InitTexture(pieceTextures[i], imageFilePaths[i]);
-        pieceTextures[i].width = squareSize;
-        pieceTextures[i].height = squareSize;
     }
 }
 
@@ -52,34 +50,41 @@ void Renderer::InitTexture(Texture2D& texture, const char* filePath) const {
     UnloadImage(image);
 }
 
-void Renderer::Draw() const {
-    ClearBackground(BLACK);
+void Renderer::DrawBoard(int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const {
     for (int i = 0; i < 64; i++) {
         Color color = (i + i / 8) % 2 == 0 ? BEIGE : BROWN;
-        DrawRectangle((i % 8) * squareSize, (i / 8) * squareSize, squareSize, squareSize, color);
+        DrawRectangle((i % 8) * squareSize + topLeftCornerX, (i / 8) * squareSize + topLeftCornerY, squareSize, squareSize, color);
     }
     
-    if (highlightedExists) {
+    if (highlightedExists && showHighlight) {
         Color color = PURPLE;
         color.a = 128;
-        DrawRectangle(highlightedX * squareSize, (7 - highlightedY) * squareSize, squareSize, squareSize, color);
+        DrawRectangle(highlightedX * squareSize + topLeftCornerX, (7 - highlightedY) * squareSize + topLeftCornerY, squareSize, squareSize, color);
     }
     
     for (int x = 0; x < 8; x++) {
         for (int y = 0; y < 8; y++) {
             Piece piece = board->pieces[x][y];
             if (piece == EMPTY) continue;
-            DrawTexture(pieceTextures[piece], x * squareSize, (7 - y) * squareSize, WHITE);
+            Texture texture = pieceTextures[piece];
+            texture.width = squareSize;
+            texture.height = squareSize;
+            DrawTexture(texture, x * squareSize + topLeftCornerX, (7 - y) * squareSize + topLeftCornerY, WHITE);
         }
     }
+}
+
+void Renderer::Draw() const {
+    ClearBackground(BLACK);
+    DrawBoard(0, 0, squareSize, true);
     
     int buttonSize = BOARD_SIZE_PIXELS / 16;
     DrawRectangle(BOARD_SIZE_PIXELS, 0, buttonSize * UNIQUE_PIECE_COUNT, buttonSize, GRAY);
     if (toPlace != EMPTY) DrawRectangle(BOARD_SIZE_PIXELS + buttonSize * (int)toPlace, 0, buttonSize, buttonSize, GREEN);
     for (int i = 0; i < UNIQUE_PIECE_COUNT; i++) {
         Texture2D texture = pieceTextures[i];
-        texture.width /= 2;
-        texture.height /= 2;
+        texture.width = squareSize / 2;
+        texture.height = squareSize / 2;
         DrawTexture(texture, BOARD_SIZE_PIXELS + i * buttonSize, 0, WHITE);
     }
     

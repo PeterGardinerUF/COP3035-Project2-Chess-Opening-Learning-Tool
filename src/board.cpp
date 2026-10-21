@@ -1,6 +1,6 @@
-#include "game.hpp"
+#include "board.hpp"
 
-Board InitialGame() {
+Board InitialBoard() {
     Board board;
     board.whiteToPlay = true;
     

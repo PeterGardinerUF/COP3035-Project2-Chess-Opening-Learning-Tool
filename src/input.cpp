@@ -34,7 +34,7 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
     };
     
     Button colorToPlayButton = {
-        .x = boardSizePixels / 16,
+        .x = boardSizePixels,
         .y = boardSizePixels / 16,
         .width = 300,
         .height = boardSizePixels / 16,
