@@ -50,7 +50,7 @@ void Renderer::InitTexture(Texture2D& texture, const char* filePath) const {
     UnloadImage(image);
 }
 
-void Renderer::DrawBoard(int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const {
+void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const {
     for (int i = 0; i < 64; i++) {
         Color color = (i + i / 8) % 2 == 0 ? BEIGE : BROWN;
         DrawRectangle((i % 8) * squareSize + topLeftCornerX, (i / 8) * squareSize + topLeftCornerY, squareSize, squareSize, color);
@@ -76,7 +76,7 @@ void Renderer::DrawBoard(int topLeftCornerX, int topLeftCornerY, int squareSize,
 
 void Renderer::Draw() const {
     ClearBackground(BLACK);
-    DrawBoard(0, 0, squareSize, true);
+    DrawBoard(board, 0, 0, squareSize, true);
     
     int buttonSize = BOARD_SIZE_PIXELS / 16;
     DrawRectangle(BOARD_SIZE_PIXELS, 0, buttonSize * UNIQUE_PIECE_COUNT, buttonSize, GRAY);

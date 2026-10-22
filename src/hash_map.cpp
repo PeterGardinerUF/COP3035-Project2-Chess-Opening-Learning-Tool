@@ -37,20 +37,22 @@ uint64_t HashMap::Hash(Board board) const {
 
 void HashMap::Insert(Board board, GameData data) {
     uint64_t h = Hash(board);
-    uint32_t index = h % MAX_GAME_COUNT;
-    Bucket bucket;
-    bucket.hashValue = h;
-    if (buckets[index].occupied && buckets[index].hashValue == h) {
-        buckets[index].count++;
-        buckets[index].data.whiteElo += data.whiteElo / buckets[index].count;
-        buckets[index].data.blackElo += data.blackElo / buckets[index].count;
-        // TODO: Reconsider continuations
-    } else if (buckets[index].occupied) {
-        // TODO: Handle collisions
-    } else {
-        buckets[index].hashValue = h;
-        buckets[index].occupied = true;
-        buckets[index].data = data;
-        // Continuations
+    
+    for (uint32_t i = 0; i < MAX_GAME_COUNT; i++) {
+        uint32_t index = (h + i) % MAX_GAME_COUNT;
+        if (!buckets[index].occupied) {
+            buckets[index].hashValue = h;
+            buckets[index].occupied = true;
+            buckets[index].data = data;
+            // TODO: Reconsider continuations
+            break;
+        } else if (buckets[index].hashValue == h) {
+            buckets[index].count++;
+            buckets[index].data.whiteElo += data.whiteElo / buckets[index].count;
+            buckets[index].data.blackElo += data.blackElo / buckets[index].count;
+            // TODO: Reconsider continuations
+            break;
+        }
     }
+    
 }

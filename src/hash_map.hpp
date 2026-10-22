@@ -12,29 +12,11 @@ struct ZobristKeys {
     uint64_t whiteToPlay;
 };
 
-struct SquareDelta {
-    int x, y;
-    Piece piece;
-};
-
-struct Continuation {
-    uint32_t count;
-    int squareDeltaCount;
-    SquareDelta deltas[3];
-};
-
-struct GameData {
-    float whiteElo;
-    float blackElo;
-    string description;
-    Continuation continuations[3];
-};
-
 struct Bucket {
     bool occupied = false;
     uint64_t hashValue;
-    GameData data;  
     uint32_t count;
+    GameData data;  
 };
 
 ZobristKeys InitializeZobristKeys();

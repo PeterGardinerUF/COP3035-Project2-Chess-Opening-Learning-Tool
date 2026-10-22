@@ -31,7 +31,7 @@ class Renderer {
     
     void InitPieceTextures();
     
-    void DrawBoard(int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
+    void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
     
     void Draw() const;
     
