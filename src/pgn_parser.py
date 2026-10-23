@@ -4,11 +4,19 @@
 import sys
 import chess.pgn
 
+# ---- Settings -----
+INPUT_PGN_FILE = "lichess_elite_2025-11.pgn"
+OUTPUT_UCI_FILE = "games.txt"
+MAX_PLY = 30 # Maximum number of half-moves to keep per game
+MIN_PLY = 10 # Drops games that are shorter than this
+MAX_GAMES = None # Maximum number of games to process (None for no limit)
+# -------------------
+
 VALID_RESULTS = {"1-0", "0-1", "1/2-1/2"}
 
 # Parse a single chess game from PGN format
 # Discards games that are too short. Caps games that are too long.
-def parse_game(game, max_ply=30, min_ply=10):
+def parse_game(game):
     result = game.headers.get("Result", "*")
     if result not in VALID_RESULTS:
         return None
@@ -16,23 +24,23 @@ def parse_game(game, max_ply=30, min_ply=10):
     moves = []
     for move in game.mainline_moves():
         moves.append(move.uci())
-        if len(moves) >= max_ply:
+        if len(moves) >= MAX_PLY:
             break
     
-    if len(moves) < min_ply:
+    if len(moves) < MIN_PLY:
         return None
 
     return result + " " + " ".join(moves)
 
 # Convert a PGN file to a one-game-per-line UCI format file.
-def convert(in_path, out_path, max_ply=30, min_ply=10):
+def convert():
     kept = dropped = 0
-    with open(in_path, encoding="utf-8", errors="replace") as fin, open(out_path, "w", encoding="utf-8") as fout:
-        while True:
+    with open(INPUT_PGN_FILE, encoding="utf-8", errors="replace") as fin, open(OUTPUT_UCI_FILE, "w", encoding="utf-8") as fout:
+        while MAX_GAMES is None or kept < MAX_GAMES:
             game = chess.pgn.read_game(fin)
             if game is None:
                 break
-            line = parse_game(game, max_ply, min_ply)
+            line = parse_game(game)
             if line is not None:
                 fout.write(line + "\n")
                 kept += 1
@@ -43,8 +51,4 @@ def convert(in_path, out_path, max_ply=30, min_ply=10):
     print(f"Kept {kept} games, dropped {dropped} games.", file=sys.stderr)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        sys.exit(__doc__)
-    max_ply = int(sys.argv[3]) if len(sys.argv) > 3 else 30
-    min_ply = int(sys.argv[4]) if len(sys.argv) > 4 else 10
-    convert(sys.argv[1], sys.argv[2], max_ply=max_ply, min_ply=min_ply)
+    convert()
