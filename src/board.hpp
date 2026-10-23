@@ -38,8 +38,8 @@ struct Continuation {
 };
 
 struct GameData {
-    float whiteElo;
-    float blackElo;
+    uint32_t accumulatedWhiteElo;
+    uint32_t accumulatedBlackElo;
     string description;
     Continuation continuations[3];
 };

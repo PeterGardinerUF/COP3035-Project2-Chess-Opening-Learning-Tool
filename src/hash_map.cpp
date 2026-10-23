@@ -44,15 +44,15 @@ void HashMap::Insert(Board board, GameData data) {
             buckets[index].hashValue = h;
             buckets[index].occupied = true;
             buckets[index].data = data;
+            buckets[index].count = 1;
             // TODO: Reconsider continuations
             break;
         } else if (buckets[index].hashValue == h) {
             buckets[index].count++;
-            buckets[index].data.whiteElo += data.whiteElo / buckets[index].count;
-            buckets[index].data.blackElo += data.blackElo / buckets[index].count;
+            buckets[index].data.accumulatedWhiteElo += data.accumulatedWhiteElo;
+            buckets[index].data.accumulatedBlackElo += data.accumulatedBlackElo;
             // TODO: Reconsider continuations
             break;
         }
     }
-    
 }
