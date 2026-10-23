@@ -58,19 +58,22 @@ public:
     int find(const vector<string>& moves) const {
         int current = 0;
         for (const string& move : moves) {
-            int next = -1;
-            for (int childIndex : nodes[current].children) {
-                if (nodes[childIndex].move == move) {
-                    next = childIndex;
-                    break;
-                }
-            }
-            if (next == -1) {
+            current = step(current, move);
+            if (current == -1) {
                 return -1; // Move not found in trie
             }
-            current = next;
         }
         return current; // Return the index of the last move in the sequence
+    }
+
+    // Steps from the given node to the next node corresponding to the move, if it exists. Returns -1 if not found.
+    int step(int node, const string& move) const {
+        for (int childIndex : nodes[node].children) {
+            if (nodes[childIndex].move == move) {
+                return childIndex;
+            }
+        }
+        return -1; // Move not found
     }
 
     // Prints the next known moves from the current position, along with their statistics
