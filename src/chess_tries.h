@@ -91,8 +91,13 @@ public:
 
 // Loads games from a file into the trie. Each line in the file should represent a game in the format:
 // result move1 move2 move3 ...
-void loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
+// Returns the number of games successfully loaded into the trie.
+int loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
     ifstream in(filepath);
+    if (!in) {
+        cout << "Could not open " << filepath << endl;
+        return 0;
+    }
     string line;
     int count = 0;
     while (count < maxGames && getline(in, line)) {
@@ -118,4 +123,5 @@ void loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
         trie.insert(moves, result);
         count++;
     }
+    return count;
 }
