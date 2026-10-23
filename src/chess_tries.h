@@ -7,7 +7,6 @@ using namespace std;
 
 struct TrieNode {
     string move; // Represents the move made as a string (e.g. e4)
-    // bool isWhite = true; // Keeps track of which color made the move
     int whiteWins = 0; // Keeps track of how many times white won the game after reaching this position
     int blackWins = 0; // Keeps track of how many times black won the game after reaching this position
     int draws = 0; // Keeps track of how many games ended in a draw after reaching this position
@@ -87,6 +86,15 @@ public:
                  << ", Black Wins: " << childNode.blackWins << ", Draws: " << childNode.draws << endl;
         }
     }
+
+    size_t memoryBytes() const {
+        size_t total = nodes.capacity() * sizeof(TrieNode);
+        for (const TrieNode& node : nodes) {
+            total += node.children.capacity() * sizeof(int);
+        }
+        return total;
+    }
+
 };
 
 // Loads games from a file into the trie. Each line in the file should represent a game in the format:
