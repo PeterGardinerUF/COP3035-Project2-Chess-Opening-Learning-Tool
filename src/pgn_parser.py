@@ -1,3 +1,10 @@
+# Converts a PGN file into a one-game-per-line UCI format:
+# 1-0 e2e4 e7e5 g1f3 b8c6 ...
+
+import sys
+import chess.pgn
+
+VALID_RESULTS = {"1-0", "0-1", "1/2-1/2"}
 
 # Parse a single chess game from PGN format
 # Discards games that are too short. Caps games that are too long.
@@ -17,59 +24,27 @@ def parse_game(game, max_ply=30, min_ply=10):
 
     return result + " " + " ".join(moves)
 
-# RT Parser
-import requests
-
-# Chess.com blocks requests that do not send a User-Agent.
-HEADERS = {"User-Agent": "chess-opening-tool"}
-
-# Download the most recent month of games for a Chess.com username.
-def get_pgn(username):
-    url = "https://api.chess.com/pub/player/" + username + "/games/archives"
-    response = requests.get(url, headers=HEADERS)
-    archives = response.json()["archives"]
-
-    if len(archives) == 0:
-        return ""
-
-    latest = archives[-1] + "/pgn"
-    response = requests.get(latest, headers=HEADERS)
-    return response.text
-
-# Pull White, Black, Result, and the moves out of a PGN.
-# Returns a list of [white, black, result, moves].
-def get_facts(pgn):
-    games = []
-    white = ""
-    black = ""
-    result = ""
-    moves = ""
-
-    for line in pgn.splitlines():
-        if line.startswith("[White "):
-            white = line.split('"')[1]
-        elif line.startswith("[Black "):
-            black = line.split('"')[1]
-        elif line.startswith("[Result "):
-            result = line.split('"')[1]
-        elif line != "" and not line.startswith("["):
-            moves = moves + " " + line
-        elif line == "" and moves != "":
-            games.append([white, black, result, moves.strip()])
-            white = ""
-            black = ""
-            result = ""
-            moves = ""
-
-    if moves != "":
-        games.append([white, black, result, moves.strip()])
-
-    return games
+# Convert a PGN file to a one-game-per-line UCI format file.
+def convert(in_path, out_path, max_ply=30, min_ply=10):
+    kept = dropped = 0
+    with open(in_path, encoding="utf-8", errors="replace") as fin, open(out_path, "w", encoding="utf-8") as fout:
+        while True:
+            game = chess.pgn.read_game(fin)
+            if game is None:
+                break
+            line = parse_game(game, max_ply, min_ply)
+            if line is not None:
+                fout.write(line + "\n")
+                kept += 1
+            else:
+                dropped += 1
+            if (kept + dropped) % 20000 == 0:
+                print(f"Processed {kept + dropped} games...", file=sys.stderr)
+    print(f"Kept {kept} games, dropped {dropped} games.", file=sys.stderr)
 
 if __name__ == "__main__":
-    username = input("Enter a Chess.com username: ")
-    pgn = get_pgn(username.strip())
-    games = get_facts(pgn)
-
-    for game in games:
-        print(game)
+    if len(sys.argv) < 3:
+        sys.exit(__doc__)
+    max_ply = int(sys.argv[3]) if len(sys.argv) > 3 else 30
+    min_ply = int(sys.argv[4]) if len(sys.argv) > 4 else 10
+    convert(sys.argv[1], sys.argv[2], max_ply=max_ply, min_ply=min_ply)
