@@ -7,7 +7,6 @@ using namespace std;
 
 struct TrieNode {
     string move; // Represents the move made as a string (e.g. e4)
-    // bool isWhite = true; // Keeps track of which color made the move
     int whiteWins = 0; // Keeps track of how many times white won the game after reaching this position
     int blackWins = 0; // Keeps track of how many times black won the game after reaching this position
     int draws = 0; // Keeps track of how many games ended in a draw after reaching this position
@@ -59,19 +58,22 @@ public:
     int find(const vector<string>& moves) const {
         int current = 0;
         for (const string& move : moves) {
-            int next = -1;
-            for (int childIndex : nodes[current].children) {
-                if (nodes[childIndex].move == move) {
-                    next = childIndex;
-                    break;
-                }
-            }
-            if (next == -1) {
+            current = step(current, move);
+            if (current == -1) {
                 return -1; // Move not found in trie
             }
-            current = next;
         }
         return current; // Return the index of the last move in the sequence
+    }
+
+    // Steps from the given node to the next node corresponding to the move, if it exists. Returns -1 if not found.
+    int step(int node, const string& move) const {
+        for (int childIndex : nodes[node].children) {
+            if (nodes[childIndex].move == move) {
+                return childIndex;
+            }
+        }
+        return -1; // Move not found
     }
 
     // Prints the next known moves from the current position, along with their statistics
@@ -87,12 +89,26 @@ public:
                  << ", Black Wins: " << childNode.blackWins << ", Draws: " << childNode.draws << endl;
         }
     }
+
+    size_t memoryBytes() const {
+        size_t total = nodes.capacity() * sizeof(TrieNode);
+        for (const TrieNode& node : nodes) {
+            total += node.children.capacity() * sizeof(int);
+        }
+        return total;
+    }
+
 };
 
 // Loads games from a file into the trie. Each line in the file should represent a game in the format:
 // result move1 move2 move3 ...
-void loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
+// Returns the number of games successfully loaded into the trie.
+int loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
     ifstream in(filepath);
+    if (!in) {
+        cout << "Could not open " << filepath << endl;
+        return 0;
+    }
     string line;
     int count = 0;
     while (count < maxGames && getline(in, line)) {
@@ -118,4 +134,5 @@ void loadFile(Trie& trie, const string& filepath, int maxGames, int maxPly) {
         trie.insert(moves, result);
         count++;
     }
+    return count;
 }
