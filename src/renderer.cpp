@@ -65,7 +65,7 @@ void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, i
     for (int x = 0; x < 8; x++) {
         for (int y = 0; y < 8; y++) {
             Piece piece = board->pieces[x][y];
-            if (piece == EMPTY) continue;
+            if (piece >= EMPTY) continue;
             Texture texture = pieceTextures[piece];
             texture.width = squareSize;
             texture.height = squareSize;

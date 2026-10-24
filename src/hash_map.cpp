@@ -1,4 +1,5 @@
 #include "hash_map.hpp"
+#include "board.hpp"
 
 ZobristKeys InitializeZobristKeys() {
     ZobristKeys keys;
@@ -23,7 +24,7 @@ HashMap::HashMap() {
     keys = InitializeZobristKeys();
 }
 
-uint64_t HashMap::Hash(Board board) const {
+uint64_t HashMap::Hash(const Board& board) const {
     uint64_t hash;
     for (int x = 0; x < 64; x++) {
         for (int y = 0; y < 64; y++) {
@@ -35,11 +36,11 @@ uint64_t HashMap::Hash(Board board) const {
     return hash;
 }
 
-void HashMap::Insert(Board board, GameData data) {
+void HashMap::InsertBoard(const Board& board, BoardData data) {
     uint64_t h = Hash(board);
     
-    for (uint32_t i = 0; i < MAX_GAME_COUNT; i++) {
-        uint32_t index = (h + i) % MAX_GAME_COUNT;
+    for (uint32_t i = 0; i < MAX_BOARD_COUNT; i++) {
+        uint32_t index = (h + i) % MAX_BOARD_COUNT;
         if (!buckets[index].occupied) {
             buckets[index].hashValue = h;
             buckets[index].occupied = true;
@@ -49,10 +50,21 @@ void HashMap::Insert(Board board, GameData data) {
             break;
         } else if (buckets[index].hashValue == h) {
             buckets[index].count++;
-            buckets[index].data.accumulatedWhiteElo += data.accumulatedWhiteElo;
-            buckets[index].data.accumulatedBlackElo += data.accumulatedBlackElo;
             // TODO: Reconsider continuations
             break;
         }
     }
+}
+
+BoardData HashMap::Find(const Board& board) const {
+    uint64_t h = Hash(board);
+    for (uint32_t i = 0; i < MAX_BOARD_COUNT; i++) {
+        uint32_t index = (h + i) % MAX_BOARD_COUNT;
+        if (buckets[index].hashValue == h) {
+            return buckets[index].data;
+        }
+    }
+    BoardData failed;
+    failed.result = -2;
+    return failed;
 }

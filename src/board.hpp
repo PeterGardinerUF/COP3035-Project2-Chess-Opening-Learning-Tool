@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <vector>
 using namespace std;
 
 #define UNIQUE_PIECE_COUNT 12
@@ -37,11 +38,10 @@ struct Continuation {
     SquareDelta deltas[3];
 };
 
-struct GameData {
-    uint32_t accumulatedWhiteElo;
-    uint32_t accumulatedBlackElo;
+struct BoardData {
     string description;
-    Continuation continuations[3];
+    int result;
+    vector<Continuation> continuations;
 };
 
 Board InitialBoard();
