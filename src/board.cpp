@@ -27,3 +27,7 @@ Board InitialBoard() {
 
     return board;
 }
+
+bool ContinuationsEquivalent(const Continuation& a, const Continuation& b) {
+    return a.fromX == b.fromX && a.fromY == b.fromY && a.toX == b.toX && a.toY == b.toY && a.promotionPiece == b.promotionPiece && a.gameOver == b.gameOver;
+}

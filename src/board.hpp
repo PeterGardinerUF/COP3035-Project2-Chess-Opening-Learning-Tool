@@ -34,13 +34,21 @@ struct SquareDelta {
 
 struct Continuation {
     uint32_t count;
-    int squareDeltaCount;
-    SquareDelta deltas[3];
+    int fromX;
+    int fromY;
+    int toX;
+    int toY;
+    Piece promotionPiece;
+    bool gameOver;
 };
+
+bool ContinuationsEquivalent(const Continuation& a, const Continuation& b);
 
 struct BoardData {
     string description;
-    int result;
+    uint32_t whiteWins;
+    uint32_t blackWins;
+    uint32_t draws;
     vector<Continuation> continuations;
 };
 

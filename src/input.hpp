@@ -13,6 +13,7 @@ enum InputState {
 typedef struct {
     InputState state;
     bool endProgram;
+    bool boardModified;
     int selectedX;
     int selectedY;
     Piece toPlace;

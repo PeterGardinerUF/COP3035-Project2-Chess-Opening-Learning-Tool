@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <random>
-#include <iostream>
+#include <sstream>
 #include "board.hpp"
 using namespace std;
 
@@ -23,17 +23,24 @@ ZobristKeys InitializeZobristKeys();
 
 class HashMap {
     
-    uint64_t Hash(const Board& board) const;
-    
     ZobristKeys keys;
-    Bucket buckets[MAX_BOARD_COUNT];
+    Bucket* buckets;
+    
+    Continuation GetContinuationFromToken(const string& token) const;
+    
+    void ApplyContinuation(Board& board, const Continuation continuation) const;
     
     public:
     
+    uint64_t Hash(const Board& board) const;
+    
     HashMap();
+    ~HashMap();
     
-    void InsertBoard(const Board& board, BoardData data);
+    void InsertUCI(string uci);
     
-    BoardData Find(const Board& board) const;
+    void InsertBoard(const Board& board, int result, Continuation continuation);
+    
+    bool Find(const Board& board, BoardData* inData) const;
     
 };
