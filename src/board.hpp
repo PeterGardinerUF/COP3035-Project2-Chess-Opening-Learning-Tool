@@ -42,6 +42,10 @@ struct Continuation {
     bool gameOver;
 };
 
+Continuation GetContinuationFromToken(const string& token);
+
+void ApplyContinuation(Board& board, const Continuation continuation);
+
 bool ContinuationsEquivalent(const Continuation& a, const Continuation& b);
 
 struct BoardData {

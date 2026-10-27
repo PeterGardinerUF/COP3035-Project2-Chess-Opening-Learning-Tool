@@ -56,12 +56,14 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
                     input.state = PIECE_SELECTED;
                 }
             } else if (input.state == PIECE_SELECTED) {
-                Piece piece = board.pieces[input.selectedX][input.selectedY];
-                board.pieces[input.selectedX][input.selectedY] = EMPTY;
-                board.pieces[clickedX][clickedY] = piece;
-                board.whiteToPlay = !board.whiteToPlay;
+                if (!(input.selectedX == clickedX && input.selectedY == clickedY)) {
+                    Piece piece = board.pieces[input.selectedX][input.selectedY];
+                    board.pieces[input.selectedX][input.selectedY] = EMPTY;
+                    board.pieces[clickedX][clickedY] = piece;
+                    board.whiteToPlay = !board.whiteToPlay;
+                    input.boardModified = true;
+                }
                 input.state = DEFAULT;
-                input.boardModified = true;
             } else if (input.state == PLACE_MODE) {
                 board.pieces[clickedX][clickedY] = input.toPlace;
                 input.boardModified = true;

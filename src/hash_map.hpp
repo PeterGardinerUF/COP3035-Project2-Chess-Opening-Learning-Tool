@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <random>
 #include <sstream>
+#include <fstream>
 #include "board.hpp"
 using namespace std;
 
@@ -25,10 +26,10 @@ class HashMap {
     
     ZobristKeys keys;
     Bucket* buckets;
+    uint32_t uniqueCount;
+    uint32_t totalCount;
     
-    Continuation GetContinuationFromToken(const string& token) const;
-    
-    void ApplyContinuation(Board& board, const Continuation continuation) const;
+    float loadFactor() const;
     
     public:
     
@@ -37,7 +38,9 @@ class HashMap {
     HashMap();
     ~HashMap();
     
-    void InsertUCI(string uci);
+    void InsertFileUCI(const string& filePath);
+    
+    void InsertUCI(const string& uci);
     
     void InsertBoard(const Board& board, int result, Continuation continuation);
     
