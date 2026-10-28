@@ -1,5 +1,24 @@
 # Converts a PGN file into a one-game-per-line UCI format:
 # 1-0 e2e4 e7e5 g1f3 b8c6 ...
+#
+# Caveats:
+# - The trie only counts games with this exact move order. The hash map
+#   counts every game that reached the same position, in any order. The
+#   win/loss ratio should be similar, but the trie is a subset of those games.
+
+
+# - The trie needs each user move from the board as the same UCI token
+#   (start square + end square, like e2e4). Algebraic moves will not match.
+
+
+# - The hash map holds 200000 positions. A full elite month is too many.
+#   This script only writes the text file.
+
+
+# - En passant and promotion already come from move.uci(). Castling is
+#   rewritten so the king lands on its rook (e1g1 -> e1h1). Queenside
+#   castling still breaks the hash map: ApplyContinuation clears the rook
+#   it just placed and leaves the king on e1/e8.
 
 import sys
 import chess.pgn
@@ -23,7 +42,18 @@ def parse_game(game):
     
     moves = []
     for move in game.mainline_moves():
-        moves.append(move.uci())
+        uci = move.uci()
+
+        # Rewrite castling moves
+        if uci == "e1g1":
+            uci = "e1h1"
+        elif uci == "e1c1":
+            uci = "e1a1"
+        elif uci == "e8g8":
+            uci = "e8h8"
+        elif uci == "e8c8":
+            uci = "e8a8"
+        moves.append(uci)
         if len(moves) >= MAX_PLY:
             break
     
