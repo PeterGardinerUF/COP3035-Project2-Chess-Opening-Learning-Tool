@@ -6,7 +6,20 @@
 #include "move_popup.hpp"
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
+const string GAMES_FILE = "games.txt"
+const int MAX_GAMES = 100000; // Number of games to load
+const int MAX_PLY = 8; // Number of half-moves deep to store (2 ply: e2e4 e7e5)
+
 int main() {
+
+    // Initializes the trie and loads all games into it
+    Trie trie;
+    int loaded = loadFile(trie, GAMES_FILE, MAX_GAMES, MAX_PLY);
+    if (loaded == 0) {
+        cout << "No games loaded. Check that " << GAMES_FILE << "exists" << endl;
+        return 1;
+    }
+    cout << "Loaded " << loaded << "games into trie successfully." << endl;
     
     Board board = InitialBoard();
     Renderer renderer(&board);
@@ -17,7 +30,6 @@ int main() {
     SetTargetFPS(30);
     Input input = InitialInput();
     // RT
-    Trie trie;
     HashMap hashMap;
     vector<string> moves;
 
