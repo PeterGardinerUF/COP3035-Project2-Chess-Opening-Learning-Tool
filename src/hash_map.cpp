@@ -83,10 +83,10 @@ void HashMap::InsertUCI(const string& uci) {
         streampos pos = stringStream.tellg();
         stringStream >> continuationToken;
         stringStream.seekg(pos);
-        Continuation continuation = GetContinuationFromToken(continuationToken);
+        Continuation continuation = GetContinuationFromTokenUCI(continuationToken);
         InsertBoard(board, result, continuation);
         
-        Continuation advanceBoardContinuation = GetContinuationFromToken(token);
+        Continuation advanceBoardContinuation = GetContinuationFromTokenUCI(token);
         ApplyContinuation(board, advanceBoardContinuation);
     }
 }
@@ -131,6 +131,9 @@ bool HashMap::Find(const Board& board, BoardData* inData) const {
     const uint64_t h = Hash(board);
     for (uint32_t i = 0; i < MAX_BOARD_COUNT; i++) {
         uint32_t index = (h + i) % MAX_BOARD_COUNT;
+        if (!buckets[index].occupied) {
+            return false;
+        }
         if (buckets[index].hashValue == h) {
             *inData = buckets[index].data;
             return true;

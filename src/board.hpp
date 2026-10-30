@@ -42,7 +42,7 @@ struct Continuation {
     bool gameOver;
 };
 
-Continuation GetContinuationFromToken(const string& token);
+Continuation GetContinuationFromTokenUCI(const string& token);
 
 void ApplyContinuation(Board& board, const Continuation continuation);
 

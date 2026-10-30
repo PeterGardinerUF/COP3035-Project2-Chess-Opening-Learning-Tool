@@ -28,7 +28,7 @@ Board InitialBoard() {
     return board;
 }
 
-Continuation GetContinuationFromToken(const string& token) {
+Continuation GetContinuationFromTokenUCI(const string& token) {
     Continuation continuation;
     if (token.length() < 4) {
         continuation.gameOver = true;
