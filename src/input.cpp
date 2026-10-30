@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include "move_popup.hpp"
 
 Input InitialInput() {
     return (Input) {
@@ -66,6 +67,8 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
             } else if (input.state == PIECE_SELECTED) {
                 if (!(input.selectedX == clickedX && input.selectedY == clickedY)) {
                     Piece piece = board.pieces[input.selectedX][input.selectedY];
+                    Piece captured = board.pieces[clickedX][clickedY];
+                    NoteMove(input.selectedX, input.selectedY, clickedX, clickedY, piece, captured);
                     board.pieces[input.selectedX][input.selectedY] = EMPTY;
                     board.pieces[clickedX][clickedY] = piece;
                     board.whiteToPlay = !board.whiteToPlay;

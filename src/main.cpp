@@ -3,6 +3,7 @@
 #include "input.hpp"
 #include "hash_map.hpp"
 #include "chess_tries.h" // RT
+#include "move_popup.hpp"
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
 int main() {
@@ -40,6 +41,7 @@ int main() {
         BeginDrawing();
             
             renderer.Draw(input.usingTrie);
+            DrawLastMove();
 
         EndDrawing();
     }

@@ -4,6 +4,7 @@
 static char label[8];
 static char uci[5];
 static int moveCount = 0;
+static int castleWait = 0;
 
 static char PieceLetter(Piece piece) {
     if (piece == WHITE_KNIGHT || piece == BLACK_KNIGHT) return 'N';
@@ -28,16 +29,32 @@ void NoteMove(int fromX, int fromY, int toX, int toY, Piece piece, Piece capture
     uci[3] = '1' + toY;
     uci[4] = 0;
 
-    if (king && fromX == 4 && fromY == toY && (fromY == 0 || fromY == 7)) {
-        if (toX == 6 || toX == 7) {
-            label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = 0;
-            return;
-        }
-        if (toX == 2 || toX == 0) {
-            label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = '-'; label[4] = 'O'; label[5] = 0;
-            return;
-        }
+    if (castleWait == 1 && piece == WHITE_ROOK && fromX == 7 && fromY == 0 && toX == 5 && toY == 0) {
+        castleWait = 0;
+        label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = 0;
+        return;
     }
+    if (castleWait == 2 && piece == WHITE_ROOK && fromX == 0 && fromY == 0 && toX == 3 && toY == 0) {
+        castleWait = 0;
+        label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = '-'; label[4] = 'O'; label[5] = 0;
+        return;
+    }
+    if (castleWait == 3 && piece == BLACK_ROOK && fromX == 7 && fromY == 7 && toX == 5 && toY == 7) {
+        castleWait = 0;
+        label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = 0;
+        return;
+    }
+    if (castleWait == 4 && piece == BLACK_ROOK && fromX == 0 && fromY == 7 && toX == 3 && toY == 7) {
+        castleWait = 0;
+        label[0] = 'O'; label[1] = '-'; label[2] = 'O'; label[3] = '-'; label[4] = 'O'; label[5] = 0;
+        return;
+    }
+
+    castleWait = 0;
+    if (king && fromX == 4 && fromY == 0 && toY == 0 && toX == 6) castleWait = 1;
+    if (king && fromX == 4 && fromY == 0 && toY == 0 && toX == 2) castleWait = 2;
+    if (king && fromX == 4 && fromY == 7 && toY == 7 && toX == 6) castleWait = 3;
+    if (king && fromX == 4 && fromY == 7 && toY == 7 && toX == 2) castleWait = 4;
 
     int n = 0;
     char letter = PieceLetter(piece);
