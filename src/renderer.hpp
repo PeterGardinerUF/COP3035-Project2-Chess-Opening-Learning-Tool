@@ -12,6 +12,7 @@ class Renderer {
     int highlightedY;
     Piece toPlace;
     
+    
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
     void InitTexture(Texture2D& texture, const char* filePath) const;
@@ -23,6 +24,15 @@ class Renderer {
     const int fontSize = 44;
     
     public:
+    
+    struct ContinuationData {
+        bool exists;
+        uint32_t whiteWins;
+        uint32_t blackWins;
+        uint32_t draws;
+        Continuation continuation;
+    };
+    ContinuationData continuations[3];
     
     const int width = BOARD_SIZE_PIXELS * 2;
     const int height = BOARD_SIZE_PIXELS;
@@ -36,6 +46,6 @@ class Renderer {
     
     void InitPieceTextures();
     
-    void Draw(const bool usingTrie) const;
+    void Draw(const bool usingTrie);
     
 };

@@ -124,3 +124,7 @@ void ApplyContinuation(Board& board, const Continuation continuation) {
 bool ContinuationsEquivalent(const Continuation& a, const Continuation& b) {
     return a.fromX == b.fromX && a.fromY == b.fromY && a.toX == b.toX && a.toY == b.toY && a.promotionPiece == b.promotionPiece && a.gameOver == b.gameOver;
 }
+
+bool ContinuationGreaterThan(const Continuation& a, const Continuation& b) {
+    return a.count > b.count;
+}

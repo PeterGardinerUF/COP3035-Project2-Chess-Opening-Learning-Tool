@@ -33,7 +33,7 @@ struct SquareDelta {
 };
 
 struct Continuation {
-    uint32_t count;
+    uint32_t count = 0;
     int fromX;
     int fromY;
     int toX;
@@ -47,6 +47,8 @@ Continuation GetContinuationFromTokenUCI(const string& token);
 void ApplyContinuation(Board& board, const Continuation continuation);
 
 bool ContinuationsEquivalent(const Continuation& a, const Continuation& b);
+
+bool ContinuationGreaterThan(const Continuation& a, const Continuation& b);
 
 struct BoardData {
     string description;

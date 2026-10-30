@@ -6,7 +6,7 @@
 #include "move_popup.hpp"
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
-const string GAMES_FILE = "games.txt"
+const string GAMES_FILE = "Data/games.txt";
 const int MAX_GAMES = 100000; // Number of games to load
 const int MAX_PLY = 8; // Number of half-moves deep to store (2 ply: e2e4 e7e5)
 
@@ -16,7 +16,7 @@ int main() {
     Trie trie;
     int loaded = loadFile(trie, GAMES_FILE, MAX_GAMES, MAX_PLY);
     if (loaded == 0) {
-        cout << "No games loaded. Check that " << GAMES_FILE << "exists" << endl;
+        cout << "No games loaded. Check that " << GAMES_FILE << " exists" << endl;
         return 1;
     }
     cout << "Loaded " << loaded << "games into trie successfully." << endl;
@@ -31,6 +31,7 @@ int main() {
     Input input = InitialInput();
     // RT
     HashMap hashMap;
+    hashMap.InsertFileUCI(GAMES_FILE);
     vector<string> moves;
 
     while (!WindowShouldClose()) {
@@ -41,7 +42,19 @@ int main() {
         } else if (input.boardModified) {
             // RT
             if (input.usingTrie == true) {
-                trie.find(moves);
+                
+                //moves.push_back("e2e4");
+                
+                vector<TrieNode> nodes = trie.returnNMoves(moves);
+                for (unsigned int i = 0; i < 3 && i < nodes.size(); i++) {
+                    Continuation continuation = GetContinuationFromTokenUCI(nodes[i].move);
+                    renderer.continuations[i].continuation = continuation;
+                    renderer.continuations[i].whiteWins = nodes[i].whiteWins;
+                    renderer.continuations[i].whiteWins = nodes[i].blackWins;
+                    renderer.continuations[i].whiteWins = nodes[i].draws;
+                    renderer.continuations[i].exists = true;
+                }
+                
             } else {
                 BoardData data;
                 hashMap.Find(board, &data);

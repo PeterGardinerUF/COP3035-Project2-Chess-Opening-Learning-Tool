@@ -4,6 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include "board.hpp"
+#include <algorithm>
 using namespace std;
 
 #define MAX_BOARD_COUNT 200000

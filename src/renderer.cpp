@@ -84,8 +84,8 @@ void Renderer::DrawContinuation(int x, const Continuation continuation, uint32_t
     DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, false);
     uint32_t totalGames = whiteWins + blackWins + draws;
     double whiteFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
-    double blackFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
-    double drawFraction  = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
+    double blackFraction = totalGames == 0 ? 0 : (double)blackWins / totalGames;
+    double drawFraction  = totalGames == 0 ? 0 : (double)draws / totalGames;
     string whiteText = "White Wins: " + to_string(whiteFraction * 100).substr(0, 4) + '%';
     string blackText = "Black Wins: " + to_string(blackFraction * 100).substr(0, 4) + '%';
     string drawText  = "Draw: " + to_string(drawFraction * 100).substr(0, 4) + '%';
@@ -94,7 +94,7 @@ void Renderer::DrawContinuation(int x, const Continuation continuation, uint32_t
     DrawText(drawText.data(), x, 340 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
 }
 
-void Renderer::Draw(const bool usingTrie) const {
+void Renderer::Draw(const bool usingTrie) {
     ClearBackground(BLACK);
     DrawBoard(board, 0, 0, squareSize, true);
     
@@ -124,6 +124,11 @@ void Renderer::Draw(const bool usingTrie) const {
         DrawText("Trie", dataStructureToggleX, dataStructureToggleY, fontSize, BLACK);
     } else {
         DrawText("Hash Map", dataStructureToggleX, dataStructureToggleY, fontSize, BLACK);
+    }
+    
+    for (int i = 0; i < 3; i++) {
+        if (!continuations[i].exists) break;
+        DrawContinuation(BOARD_SIZE_PIXELS + 20 + (BOARD_SIZE_PIXELS / 4 + 20) * i, continuations[i].continuation, continuations[i].whiteWins, continuations[i].blackWins, continuations[i].draws);
     }
     
 }

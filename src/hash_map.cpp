@@ -1,4 +1,5 @@
 #include "hash_map.hpp"
+#include "board.hpp"
 
 ZobristKeys InitializeZobristKeys() {
     ZobristKeys keys;
@@ -107,7 +108,22 @@ void HashMap::InsertBoard(const Board& board, int result, Continuation continuat
             } else if (result == 0) {
                 buckets[index].data.draws++;
             }
-            buckets[index].data.continuations.push_back(continuation); // TODO: Reconsider continuations
+            
+            bool continuationFound = false;
+            for (Continuation& cont : buckets[index].data.continuations) {
+                if (ContinuationsEquivalent(cont, continuation)) {
+                    cont.count++;
+                    continuationFound = true;
+                    break;
+                }
+            }
+            
+            if (!continuationFound) {
+                buckets[index].data.continuations.push_back(continuation);
+            }
+            
+            sort(buckets[index].data.continuations.begin(), buckets[index].data.continuations.end(), ContinuationGreaterThan);
+            
             totalCount++;
             uniqueCount++;
             break;
@@ -120,7 +136,22 @@ void HashMap::InsertBoard(const Board& board, int result, Continuation continuat
             } else if (result == 0) {
                 buckets[index].data.draws++;
             }
-            buckets[index].data.continuations.push_back(continuation); // TODO: Reconsider continuations
+            
+            bool continuationFound = false;
+            for (Continuation& cont : buckets[index].data.continuations) {
+                if (ContinuationsEquivalent(cont, continuation)) {
+                    cont.count++;
+                    continuationFound = true;
+                    break;
+                }
+            }
+            
+            if (!continuationFound) {
+                buckets[index].data.continuations.push_back(continuation);
+            }
+            
+            sort(buckets[index].data.continuations.begin(), buckets[index].data.continuations.end(), ContinuationGreaterThan);
+            
             totalCount++;
             break;
         }
