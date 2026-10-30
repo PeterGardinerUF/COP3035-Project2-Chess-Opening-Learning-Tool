@@ -78,7 +78,7 @@ public:
     }
 
     // Returns a vector of the 3 most frequently played replies in order
-    vector<TrieNode> returnNMoves(const vector<string>& moves, int n) const {
+    vector<TrieNode> returnNMoves(const vector<string>& moves, int n = 3) const {
         int currentIndex = find(moves);
         if (currentIndex == -1) {
             cout << "Position not found." << endl;
