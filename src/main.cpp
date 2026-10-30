@@ -16,7 +16,7 @@ int main() {
     Trie trie;
     int loaded = loadFile(trie, GAMES_FILE, MAX_GAMES, MAX_PLY);
     if (loaded == 0) {
-        cout << "No games loaded. Check that " << GAMES_FILE << "exists" << endl;
+        cout << "No games loaded. Check that " << GAMES_FILE << " exists" << endl;
         return 1;
     }
     cout << "Loaded " << loaded << "games into trie successfully." << endl;
