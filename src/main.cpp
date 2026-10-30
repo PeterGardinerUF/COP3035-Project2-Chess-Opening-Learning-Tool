@@ -19,13 +19,15 @@ int main() {
         HandleInput(board, input, BOARD_SIZE_PIXELS);
         if (input.endProgram) {
             break;
+        } else if (input.boardModified) {
+            
         }
         renderer.SetHighlighted(input.state == PIECE_SELECTED, input.selectedX, input.selectedY);
         renderer.SetPieceToPlace(input.toPlace);
         
         BeginDrawing();
             
-            renderer.Draw();
+            renderer.Draw(input.usingTrie);
 
         EndDrawing();
     }

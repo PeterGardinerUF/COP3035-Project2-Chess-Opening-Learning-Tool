@@ -1,4 +1,6 @@
 #include "renderer.hpp"
+#include "raylib.h"
+#include <iostream>
 
 void Renderer::SetHighlighted(bool exists, int x, int y) {
     highlightedExists = exists;
@@ -74,7 +76,25 @@ void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, i
     }
 }
 
-void Renderer::Draw() const {
+void Renderer::DrawContinuation(int x, const Continuation continuation, uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const {
+    Board newBoard = *board;
+    
+    ApplyContinuation(newBoard, continuation);
+    
+    DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, false);
+    uint32_t totalGames = whiteWins + blackWins + draws;
+    double whiteFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
+    double blackFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
+    double drawFraction  = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
+    string whiteText = "White Wins: " + to_string(whiteFraction * 100).substr(0, 4) + '%';
+    string blackText = "Black Wins: " + to_string(blackFraction * 100).substr(0, 4) + '%';
+    string drawText  = "Draw: " + to_string(drawFraction * 100).substr(0, 4) + '%';
+    DrawText(whiteText.data(), x, 300 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(blackText.data(), x, 320 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(drawText.data(), x, 340 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+}
+
+void Renderer::Draw(const bool usingTrie) const {
     ClearBackground(BLACK);
     DrawBoard(board, 0, 0, squareSize, true);
     
@@ -96,4 +116,14 @@ void Renderer::Draw() const {
     } else {
         DrawText("Black to play", playerButtonX, playerButtonY, fontSize, BLACK);
     }
+    
+    int dataStructureToggleX = BOARD_SIZE_PIXELS;
+    int dataStructureToggleY = BOARD_SIZE_PIXELS / 16 * 4;
+    DrawRectangle(dataStructureToggleX, dataStructureToggleY, 250, fontSize, GRAY);
+    if (usingTrie) {
+        DrawText("Trie", dataStructureToggleX, dataStructureToggleY, fontSize, BLACK);
+    } else {
+        DrawText("Hash Map", dataStructureToggleX, dataStructureToggleY, fontSize, BLACK);
+    }
+    
 }

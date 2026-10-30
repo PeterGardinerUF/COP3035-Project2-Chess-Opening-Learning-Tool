@@ -15,6 +15,11 @@ class Renderer {
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
     void InitTexture(Texture2D& texture, const char* filePath) const;
+    
+    void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
+    
+    void DrawContinuation(int x, const Continuation continuation, uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const;
+    
     const int fontSize = 44;
     
     public:
@@ -31,8 +36,6 @@ class Renderer {
     
     void InitPieceTextures();
     
-    void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
-    
-    void Draw() const;
+    void Draw(const bool usingTrie) const;
     
 };

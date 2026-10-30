@@ -5,6 +5,7 @@ Input InitialInput() {
         .state = DEFAULT,
         .endProgram = false,
         .boardModified = false,
+        .usingTrie = true,
         .selectedX = 0,
         .selectedY = 0,
         .toPlace = EMPTY,
@@ -38,6 +39,13 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
     Button colorToPlayButton = {
         .x = boardSizePixels,
         .y = boardSizePixels / 16,
+        .width = 300,
+        .height = boardSizePixels / 16,
+    };
+    
+    Button dataStructureToggle = {
+        .x = boardSizePixels,
+        .y = boardSizePixels / 16 * 4,
         .width = 300,
         .height = boardSizePixels / 16,
     };
@@ -82,6 +90,12 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
         } else if (IsMouseOver(colorToPlayButton, mousePosition)) {
             board.whiteToPlay = !board.whiteToPlay;
             input.boardModified = true;
+        } else if (IsMouseOver(dataStructureToggle, mousePosition)) {
+            input.usingTrie = !input.usingTrie;
+            if (input.usingTrie) {
+                board = InitialBoard();
+                input.boardModified = true;
+            }
         }
     } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
         if (IsMouseOver(boardButton, mousePosition)) {

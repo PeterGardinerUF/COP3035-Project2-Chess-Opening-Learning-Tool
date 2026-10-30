@@ -14,6 +14,7 @@ typedef struct {
     InputState state;
     bool endProgram;
     bool boardModified;
+    bool usingTrie;
     int selectedX;
     int selectedY;
     Piece toPlace;
