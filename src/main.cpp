@@ -19,7 +19,7 @@ int main() {
         cout << "No games loaded. Check that " << GAMES_FILE << " exists" << endl;
         return 1;
     }
-    cout << "Loaded " << loaded << "games into trie successfully." << endl;
+    cout << "Loaded " << loaded << " games into trie successfully." << endl;
     
     Board board = InitialBoard();
     Renderer renderer(&board);
