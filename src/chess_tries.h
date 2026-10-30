@@ -3,10 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 struct TrieNode {
-    string move; // Represents the move made as a string (e.g. e4)
+    string move; // Represents the move made as a string in UCI format (e.g. e2e4)
     int whiteWins = 0; // Keeps track of how many times white won the game after reaching this position
     int blackWins = 0; // Keeps track of how many times black won the game after reaching this position
     int draws = 0; // Keeps track of how many games ended in a draw after reaching this position
@@ -76,18 +77,26 @@ public:
         return -1; // Move not found
     }
 
-    // Prints the next known moves from the current position, along with their statistics
-    void printNextMoves(const vector<string>& moves) const {
+    // Returns a vector of the 3 most frequently played replies in order
+    vector<TrieNode> returnNMoves(const vector<string>& moves, int n) const {
         int currentIndex = find(moves);
         if (currentIndex == -1) {
             cout << "Position not found." << endl;
             return;
         }
-        for (int childIndex : nodes[currentIndex].children) {
-            const TrieNode& childNode = nodes[childIndex];
-            cout << "Move: " << childNode.move << ", White Wins: " << childNode.whiteWins
-                 << ", Black Wins: " << childNode.blackWins << ", Draws: " << childNode.draws << endl;
+        vector<int> sorted = nodes[currentIndex].children;
+        sort(sorted.begin(), sorted.end(), [this](int a, int b) {
+            int totalA = nodes[a].whiteWins + nodes[a].blackWins + nodes[a].draws;
+            int totalB = nodes[b].whiteWins + nodes[b].blackWins + nodes[b].draws;
+            return totalA > totalB; // Sort in descending order of total games played
+        });
+        int numToPrint = min(n, (int)sorted.size());
+        vector<TrieNode> topMoves;
+        for (int i = 0; i < numToPrint; i++) {
+            topMoves.push_back(nodes[sorted[i]]);
         }
+        return topMoves;
+
     }
 
     size_t memoryBytes() const {
