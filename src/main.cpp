@@ -6,7 +6,7 @@
 #include "move_popup.hpp"
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
-const string GAMES_FILE = "games.txt"
+const string GAMES_FILE = "games.txt";
 const int MAX_GAMES = 100000; // Number of games to load
 const int MAX_PLY = 8; // Number of half-moves deep to store (2 ply: e2e4 e7e5)
 
