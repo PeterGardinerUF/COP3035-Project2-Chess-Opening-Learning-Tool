@@ -80,9 +80,8 @@ public:
     // Returns a vector of the 3 most frequently played replies in order
     vector<TrieNode> returnNMoves(const vector<string>& moves, int n = 3) const {
         int currentIndex = find(moves);
-        if (currentIndex == -1) {
-            cout << "Position not found." << endl;
-            return;
+        if (currentIndex == -1) { // Move is not found in database
+            return {};
         }
         vector<int> sorted = nodes[currentIndex].children;
         sort(sorted.begin(), sorted.end(), [this](int a, int b) {
@@ -90,13 +89,12 @@ public:
             int totalB = nodes[b].whiteWins + nodes[b].blackWins + nodes[b].draws;
             return totalA > totalB; // Sort in descending order of total games played
         });
-        int numToPrint = min(n, (int)sorted.size());
+        int count = min(n, (int)sorted.size());
         vector<TrieNode> topMoves;
-        for (int i = 0; i < numToPrint; i++) {
+        for (int i = 0; i < count; i++) {
             topMoves.push_back(nodes[sorted[i]]);
         }
         return topMoves;
-
     }
 
     size_t memoryBytes() const {
