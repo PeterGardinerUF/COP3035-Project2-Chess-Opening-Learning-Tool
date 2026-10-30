@@ -2,6 +2,7 @@
 #include "renderer.hpp"
 #include "input.hpp"
 #include "hash_map.hpp"
+#include "chess_tries.h" // RT
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
 int main() {
@@ -14,13 +15,24 @@ int main() {
     
     SetTargetFPS(30);
     Input input = InitialInput();
+    // RT
+    Trie trie;
+    HashMap hashMap;
+    vector<string> moves;
+
     while (!WindowShouldClose()) {
         
         HandleInput(board, input, BOARD_SIZE_PIXELS);
         if (input.endProgram) {
             break;
         } else if (input.boardModified) {
-            
+            // RT
+            if (input.usingTrie == true) {
+                trie.find(moves);
+            } else {
+                BoardData data;
+                hashMap.Find(board, &data);
+            }
         }
         renderer.SetHighlighted(input.state == PIECE_SELECTED, input.selectedX, input.selectedY);
         renderer.SetPieceToPlace(input.toPlace);
