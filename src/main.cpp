@@ -64,9 +64,6 @@ int main() {
                             BoardData nextData;
                             if (!hashMap.Find(nextBoard, &nextData)) {
                                 renderer.continuations[i].exists = true;
-                                Continuation c = data.continuations[i];
-                                cout << c.fromX << " " << c.fromY << "\n";
-                                cout << c.toX << " " << c.toY << "\n\n";
                                 continue;
                             }
                             
