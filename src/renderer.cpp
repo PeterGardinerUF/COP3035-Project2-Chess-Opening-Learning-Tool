@@ -76,22 +76,29 @@ void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, i
     }
 }
 
-void Renderer::DrawContinuation(int x, const Continuation continuation, uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const {
+void Renderer::DrawContinuation(int x, const ContinuationData& continuation) const {
+    if (!continuation.exists) {
+        DrawText("NOT FOUND", x, 300 + BOARD_SIZE_PIXELS / 4, 20, RED);
+        return;
+    }
+    
     Board newBoard = *board;
     
-    ApplyContinuation(newBoard, continuation);
+    ApplyContinuation(newBoard, continuation.continuation);
     
     DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, false);
-    uint32_t totalGames = whiteWins + blackWins + draws;
-    double whiteFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
-    double blackFraction = totalGames == 0 ? 0 : (double)blackWins / totalGames;
-    double drawFraction  = totalGames == 0 ? 0 : (double)draws / totalGames;
+    uint32_t totalGames = continuation.whiteWins + continuation.blackWins + continuation.draws;
+    double whiteFraction = totalGames == 0 ? 0 : (double)continuation.whiteWins / totalGames;
+    double blackFraction = totalGames == 0 ? 0 : (double)continuation.blackWins / totalGames;
+    double drawFraction  = totalGames == 0 ? 0 : (double)continuation.draws / totalGames;
     string whiteText = "White Wins: " + to_string(whiteFraction * 100).substr(0, 4) + '%';
     string blackText = "Black Wins: " + to_string(blackFraction * 100).substr(0, 4) + '%';
     string drawText  = "Draw: " + to_string(drawFraction * 100).substr(0, 4) + '%';
     DrawText(whiteText.data(), x, 300 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
     DrawText(blackText.data(), x, 320 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
     DrawText(drawText.data(), x, 340 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    string gameCountText = "Game count:\n" + to_string(totalGames);
+    DrawText(gameCountText.data(), x, 360 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
 }
 
 void Renderer::Draw(const bool usingTrie) {
@@ -127,8 +134,7 @@ void Renderer::Draw(const bool usingTrie) {
     }
     
     for (int i = 0; i < 3; i++) {
-        if (!continuations[i].exists) break;
-        DrawContinuation(BOARD_SIZE_PIXELS + 20 + (BOARD_SIZE_PIXELS / 4 + 20) * i, continuations[i].continuation, continuations[i].whiteWins, continuations[i].blackWins, continuations[i].draws);
+        DrawContinuation(BOARD_SIZE_PIXELS + 20 + (BOARD_SIZE_PIXELS / 4 + 20) * i, continuations[i]);
     }
     
 }

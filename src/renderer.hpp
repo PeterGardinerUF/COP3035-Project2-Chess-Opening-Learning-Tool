@@ -12,14 +12,12 @@ class Renderer {
     int highlightedY;
     Piece toPlace;
     
-    
     Texture2D pieceTextures[UNIQUE_PIECE_COUNT];
     
     void InitTexture(Texture2D& texture, const char* filePath) const;
     
     void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
     
-    void DrawContinuation(int x, const Continuation continuation, uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const;
     
     const int fontSize = 44;
     
@@ -27,12 +25,14 @@ class Renderer {
     
     struct ContinuationData {
         bool exists;
-        uint32_t whiteWins;
-        uint32_t blackWins;
-        uint32_t draws;
+        uint32_t whiteWins = 0;
+        uint32_t blackWins = 0;
+        uint32_t draws = 0;
         Continuation continuation;
     };
     ContinuationData continuations[3];
+    
+    void DrawContinuation(int x, const ContinuationData& continuation) const;
     
     const int width = BOARD_SIZE_PIXELS * 2;
     const int height = BOARD_SIZE_PIXELS;

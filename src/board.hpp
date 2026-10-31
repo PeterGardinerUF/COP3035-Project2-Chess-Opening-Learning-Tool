@@ -50,11 +50,13 @@ bool ContinuationsEquivalent(const Continuation& a, const Continuation& b);
 
 bool ContinuationGreaterThan(const Continuation& a, const Continuation& b);
 
+bool ContinuationLessThan(const Continuation& a, const Continuation& b);
+
 struct BoardData {
     string description;
-    uint32_t whiteWins;
-    uint32_t blackWins;
-    uint32_t draws;
+    uint32_t whiteWins = 0;
+    uint32_t blackWins = 0;
+    uint32_t draws = 0;
     vector<Continuation> continuations;
 };
 

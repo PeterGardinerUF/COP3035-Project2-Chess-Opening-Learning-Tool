@@ -42,9 +42,6 @@ int main() {
         } else if (input.boardModified) {
             // RT
             if (input.usingTrie == true) {
-                
-                //moves.push_back("e2e4");
-                
                 vector<TrieNode> nodes = trie.returnNMoves(moves);
                 for (unsigned int i = 0; i < 3 && i < nodes.size(); i++) {
                     Continuation continuation = GetContinuationFromTokenUCI(nodes[i].move);
@@ -57,7 +54,36 @@ int main() {
                 
             } else {
                 BoardData data;
-                hashMap.Find(board, &data);
+                if (hashMap.Find(board, &data)) {
+                    for (unsigned int i = 0; i < 3; i++) {
+                        if (i < data.continuations.size()) {
+                            renderer.continuations[i].continuation = data.continuations[i];
+                            
+                            Board nextBoard = board;
+                            ApplyContinuation(nextBoard, data.continuations[i]);
+                            BoardData nextData;
+                            if (!hashMap.Find(nextBoard, &nextData)) {
+                                renderer.continuations[i].exists = true;
+                                Continuation c = data.continuations[i];
+                                cout << c.fromX << " " << c.fromY << "\n";
+                                cout << c.toX << " " << c.toY << "\n\n";
+                                continue;
+                            }
+                            
+                            renderer.continuations[i].whiteWins = nextData.whiteWins;
+                            renderer.continuations[i].blackWins = nextData.blackWins;
+                            renderer.continuations[i].draws = nextData.draws;
+                            renderer.continuations[i].exists = true;
+                            
+                        } else {
+                            renderer.continuations[i].exists = false;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < 3; i++) {
+                        renderer.continuations[i].exists = false;
+                    }
+                }
             }
         }
         renderer.SetHighlighted(input.state == PIECE_SELECTED, input.selectedX, input.selectedY);

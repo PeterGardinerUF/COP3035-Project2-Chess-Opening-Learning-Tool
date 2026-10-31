@@ -1,5 +1,5 @@
 #include "hash_map.hpp"
-#include "board.hpp"
+#include <iostream>
 
 ZobristKeys InitializeZobristKeys() {
     ZobristKeys keys;
@@ -78,17 +78,24 @@ void HashMap::InsertUCI(const string& uci) {
         result = 0;
     }
     
+    string continuationToken;
+    streampos pos = stringStream.tellg();
+    stringStream >> continuationToken;
+    stringStream.seekg(pos);
+    Continuation continuation = GetContinuationFromTokenUCI(continuationToken);
+    InsertBoard(board, result, continuation);
+    
     string token;
     while (stringStream >> token) {
+        Continuation advanceBoardContinuation = GetContinuationFromTokenUCI(token);
+        ApplyContinuation(board, advanceBoardContinuation);
+        
         string continuationToken;
         streampos pos = stringStream.tellg();
         stringStream >> continuationToken;
         stringStream.seekg(pos);
         Continuation continuation = GetContinuationFromTokenUCI(continuationToken);
         InsertBoard(board, result, continuation);
-        
-        Continuation advanceBoardContinuation = GetContinuationFromTokenUCI(token);
-        ApplyContinuation(board, advanceBoardContinuation);
     }
 }
 

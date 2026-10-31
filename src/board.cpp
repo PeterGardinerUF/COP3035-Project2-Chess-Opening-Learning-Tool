@@ -128,3 +128,7 @@ bool ContinuationsEquivalent(const Continuation& a, const Continuation& b) {
 bool ContinuationGreaterThan(const Continuation& a, const Continuation& b) {
     return a.count > b.count;
 }
+
+bool ContinuationLessThan(const Continuation& a, const Continuation& b) {
+    return a.count < b.count;
+}

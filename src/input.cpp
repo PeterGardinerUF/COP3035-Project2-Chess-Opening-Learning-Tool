@@ -5,7 +5,7 @@ Input InitialInput() {
     return (Input) {
         .state = DEFAULT,
         .endProgram = false,
-        .boardModified = false,
+        .boardModified = true,
         .usingTrie = true,
         .selectedX = 0,
         .selectedY = 0,
@@ -94,10 +94,10 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
             board.whiteToPlay = !board.whiteToPlay;
             input.boardModified = true;
         } else if (IsMouseOver(dataStructureToggle, mousePosition)) {
+            input.boardModified = true;
             input.usingTrie = !input.usingTrie;
             if (input.usingTrie) {
                 board = InitialBoard();
-                input.boardModified = true;
             }
         }
     } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
