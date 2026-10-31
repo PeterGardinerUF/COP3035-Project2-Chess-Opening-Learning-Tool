@@ -52,16 +52,16 @@ void Renderer::InitTexture(Texture2D& texture, const char* filePath) const {
     UnloadImage(image);
 }
 
-void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const {
+void Renderer::DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight, int highlightX, int highlightY) const {
     for (int i = 0; i < 64; i++) {
         Color color = (i + i / 8) % 2 == 0 ? BEIGE : BROWN;
         DrawRectangle((i % 8) * squareSize + topLeftCornerX, (i / 8) * squareSize + topLeftCornerY, squareSize, squareSize, color);
     }
     
-    if (highlightedExists && showHighlight) {
+    if (showHighlight) {
         Color color = PURPLE;
         color.a = 128;
-        DrawRectangle(highlightedX * squareSize + topLeftCornerX, (7 - highlightedY) * squareSize + topLeftCornerY, squareSize, squareSize, color);
+        DrawRectangle(highlightX * squareSize + topLeftCornerX, (7 - highlightY) * squareSize + topLeftCornerY, squareSize, squareSize, color);
     }
     
     for (int x = 0; x < 8; x++) {
@@ -86,7 +86,7 @@ void Renderer::DrawContinuation(int x, const ContinuationData& continuation) con
     
     ApplyContinuation(newBoard, continuation.continuation);
     
-    DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, false);
+    DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, true, continuation.continuation.toX, continuation.continuation.toY);
     uint32_t totalGames = continuation.whiteWins + continuation.blackWins + continuation.draws;
     double whiteFraction = totalGames == 0 ? 0 : (double)continuation.whiteWins / totalGames;
     double blackFraction = totalGames == 0 ? 0 : (double)continuation.blackWins / totalGames;
@@ -103,7 +103,7 @@ void Renderer::DrawContinuation(int x, const ContinuationData& continuation) con
 
 void Renderer::Draw(const bool usingTrie) {
     ClearBackground(BLACK);
-    DrawBoard(board, 0, 0, squareSize, true);
+    DrawBoard(board, 0, 0, squareSize, highlightedExists, highlightedX, highlightedY);
     
     int buttonSize = BOARD_SIZE_PIXELS / 16;
     DrawRectangle(BOARD_SIZE_PIXELS, 0, buttonSize * UNIQUE_PIECE_COUNT, buttonSize, GRAY);

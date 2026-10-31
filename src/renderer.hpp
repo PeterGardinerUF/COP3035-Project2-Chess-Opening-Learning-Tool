@@ -16,8 +16,7 @@ class Renderer {
     
     void InitTexture(Texture2D& texture, const char* filePath) const;
     
-    void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight) const;
-    
+    void DrawBoard(Board* board, int topLeftCornerX, int topLeftCornerY, int squareSize, bool showHighlight, int highlightX, int highlightY) const;
     
     const int fontSize = 44;
     
