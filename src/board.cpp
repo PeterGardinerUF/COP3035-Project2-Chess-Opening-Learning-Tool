@@ -73,12 +73,12 @@ void ApplyContinuation(Board& board, const Continuation continuation) {
     int toY = continuation.toY;
     
     if (fromX == 4 && fromY == 0 && board.pieces[4][0] == WHITE_KING && toY == 0) {
-        if (toX == 0) {
+        if (toX == 0 || toX == 1 || toX == 2) {
             board.pieces[0][0] = EMPTY;
             board.pieces[2][0] = WHITE_KING;
             board.pieces[3][0] = WHITE_ROOK;
-            board.pieces[3][0] = EMPTY;
-        } else if (toX == 7) {
+            board.pieces[4][0] = EMPTY;
+        } else if (toX == 6 || toX == 7) {
             board.pieces[4][0] = EMPTY;
             board.pieces[5][0] = WHITE_ROOK;
             board.pieces[6][0] = WHITE_KING;
@@ -87,12 +87,12 @@ void ApplyContinuation(Board& board, const Continuation continuation) {
         board.whiteToPlay = !board.whiteToPlay;
         return;
     } else if (fromX == 4 && fromY == 7 && board.pieces[4][7] == BLACK_KING && toY == 7) {
-        if (toX == 0) {
+        if (toX == 0 || toX == 1 || toX == 2) {
             board.pieces[0][7] = EMPTY;
             board.pieces[2][7] = BLACK_KING;
             board.pieces[3][7] = BLACK_ROOK;
-            board.pieces[3][7] = EMPTY;
-        } else if (toX == 7) {
+            board.pieces[4][7] = EMPTY;
+        } else if (toX == 6 || toX == 7) {
             board.pieces[4][7] = EMPTY;
             board.pieces[5][7] = BLACK_ROOK;
             board.pieces[6][7] = BLACK_KING;
