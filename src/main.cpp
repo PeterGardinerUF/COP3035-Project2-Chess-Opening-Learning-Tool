@@ -58,6 +58,8 @@ int main() {
                     for (unsigned int i = 0; i < 3; i++) {
                         if (i < data.continuations.size()) {
                             renderer.continuations[i].continuation = data.continuations[i];
+                            renderer.boardDataExists = true;
+                            renderer.boardData = data;
                             
                             Board nextBoard = board;
                             ApplyContinuation(nextBoard, data.continuations[i]);
@@ -80,6 +82,7 @@ int main() {
                     for (int i = 0; i < 3; i++) {
                         renderer.continuations[i].exists = false;
                     }
+                    renderer.boardDataExists = false;
                 }
             }
         }

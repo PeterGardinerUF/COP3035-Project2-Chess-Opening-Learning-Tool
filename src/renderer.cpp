@@ -84,7 +84,7 @@ void Renderer::DrawContinuation(int x, const ContinuationData& continuation) con
     
     ApplyContinuation(newBoard, continuation.continuation);
     
-    DrawBoard(&newBoard, x, 300, BOARD_SIZE_PIXELS / 16 / 2, true, continuation.continuation.toX, continuation.continuation.toY);
+    DrawBoard(&newBoard, x, 400, BOARD_SIZE_PIXELS / 16 / 2, true, continuation.continuation.toX, continuation.continuation.toY);
     uint32_t totalGames = continuation.whiteWins + continuation.blackWins + continuation.draws;
     double whiteFraction = totalGames == 0 ? 0 : (double)continuation.whiteWins / totalGames;
     double blackFraction = totalGames == 0 ? 0 : (double)continuation.blackWins / totalGames;
@@ -92,11 +92,31 @@ void Renderer::DrawContinuation(int x, const ContinuationData& continuation) con
     string whiteText = "White Wins: " + to_string(whiteFraction * 100).substr(0, 4) + '%';
     string blackText = "Black Wins: " + to_string(blackFraction * 100).substr(0, 4) + '%';
     string drawText  = "Draw: " + to_string(drawFraction * 100).substr(0, 4) + '%';
-    DrawText(whiteText.data(), x, 300 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
-    DrawText(blackText.data(), x, 320 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
-    DrawText(drawText.data(), x, 340 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(whiteText.data(), x, 400 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(blackText.data(), x, 420 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(drawText.data(), x, 440 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
     string gameCountText = "Game count:\n" + to_string(totalGames);
-    DrawText(gameCountText.data(), x, 360 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+    DrawText(gameCountText.data(), x, 460 + BOARD_SIZE_PIXELS / 4, 20, GREEN);
+}
+
+void Renderer::DrawGameInfo(uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const {
+    if (!boardDataExists) {
+        DrawText("Game not found", BOARD_SIZE_PIXELS + 40, 240, 40, RED);
+        return;
+    }
+    
+    uint32_t totalGames = whiteWins + blackWins + draws;
+    double whiteFraction = totalGames == 0 ? 0 : (double)whiteWins / totalGames;
+    double blackFraction = totalGames == 0 ? 0 : (double)blackWins / totalGames;
+    double drawFraction  = totalGames == 0 ? 0 : (double)draws / totalGames;
+    string whiteText = "White Wins: " + to_string(whiteFraction * 100).substr(0, 4) + '%';
+    string blackText = "Black Wins: " + to_string(blackFraction * 100).substr(0, 4) + '%';
+    string drawText  = "Draw: " + to_string(drawFraction * 100).substr(0, 4) + '%';
+    DrawText(whiteText.data(), BOARD_SIZE_PIXELS + 20, 240, 30, GREEN);
+    DrawText(blackText.data(), BOARD_SIZE_PIXELS + 20, 270, 30, GREEN);
+    DrawText(drawText.data(), BOARD_SIZE_PIXELS + 20, 300, 30, GREEN);
+    string gameCountText = "Game count: " + to_string(totalGames);
+    DrawText(gameCountText.data(), BOARD_SIZE_PIXELS + 20, 330, 30, GREEN);
 }
 
 void Renderer::Draw(const bool usingTrie) {
@@ -135,4 +155,5 @@ void Renderer::Draw(const bool usingTrie) {
         DrawContinuation(BOARD_SIZE_PIXELS + 20 + (BOARD_SIZE_PIXELS / 4 + 20) * i, continuations[i]);
     }
     
+    DrawGameInfo(boardData.whiteWins, boardData.blackWins, boardData.draws);
 }

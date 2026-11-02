@@ -31,7 +31,12 @@ class Renderer {
     };
     ContinuationData continuations[3];
     
+    BoardData boardData;
+    bool boardDataExists;
+    
     void DrawContinuation(int x, const ContinuationData& continuation) const;
+    
+    void DrawGameInfo(uint32_t whiteWins, uint32_t blackWins, uint32_t draws) const;
     
     const int width = BOARD_SIZE_PIXELS * 2;
     const int height = BOARD_SIZE_PIXELS;
