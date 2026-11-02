@@ -1,5 +1,4 @@
 #include "input.hpp"
-#include "move_popup.hpp"
 
 Input InitialInput() {
     return (Input) {

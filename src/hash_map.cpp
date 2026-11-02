@@ -25,6 +25,7 @@ HashMap::HashMap() {
     buckets = (Bucket*)malloc(MAX_BOARD_COUNT * sizeof(Bucket));
     uniqueCount = 0;
     totalCount = 0;
+    capacityReached = false;
 }
 
 HashMap::~HashMap() {
@@ -100,6 +101,13 @@ void HashMap::InsertUCI(const string& uci) {
 }
 
 void HashMap::InsertBoard(const Board& board, int result, Continuation continuation) {
+    if (loadFactor() >= 0.999) {
+        if (capacityReached) return;
+        cout << "Hashmap capacity reached\n";
+        capacityReached = true;
+        return;
+    }
+    
     const uint64_t h = Hash(board);
     
     for (uint32_t i = 0; i < MAX_BOARD_COUNT; i++) {

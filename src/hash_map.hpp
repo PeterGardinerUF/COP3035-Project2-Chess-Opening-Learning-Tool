@@ -7,7 +7,7 @@
 #include <algorithm>
 using namespace std;
 
-#define MAX_BOARD_COUNT 200000
+#define MAX_BOARD_COUNT 4000000
 
 struct ZobristKeys {
     uint64_t pieceSquare[UNIQUE_PIECE_COUNT][8][8];
@@ -29,6 +29,8 @@ class HashMap {
     Bucket* buckets;
     uint32_t uniqueCount;
     uint32_t totalCount;
+    
+    bool capacityReached;
     
     float loadFactor() const;
     

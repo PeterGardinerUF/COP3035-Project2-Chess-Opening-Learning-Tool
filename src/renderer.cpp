@@ -1,6 +1,4 @@
 #include "renderer.hpp"
-#include "raylib.h"
-#include <iostream>
 
 void Renderer::SetHighlighted(bool exists, int x, int y) {
     highlightedExists = exists;

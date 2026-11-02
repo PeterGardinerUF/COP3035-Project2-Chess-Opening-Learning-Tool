@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "raylib.h"
 #include "board.hpp"
+#include "move_popup.hpp"
 using namespace std;
 
 enum InputState {
