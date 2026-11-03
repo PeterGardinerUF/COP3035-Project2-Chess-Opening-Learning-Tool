@@ -7,7 +7,7 @@
 #include <algorithm>
 using namespace std;
 
-#define MAX_BOARD_COUNT 4000000
+#define MAX_BOARD_COUNT 8000000
 
 struct ZobristKeys {
     uint64_t pieceSquare[UNIQUE_PIECE_COUNT][8][8];

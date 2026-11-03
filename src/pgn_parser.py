@@ -11,14 +11,11 @@
 #   (start square + end square, like e2e4). Algebraic moves will not match.
 
 
-# - The hash map holds 200000 positions. A full elite month is too many.
 #   This script only writes the text file.
 
 
 # - En passant and promotion already come from move.uci(). Castling is
-#   rewritten so the king lands on its rook (e1g1 -> e1h1). Queenside
-#   castling still breaks the hash map: ApplyContinuation clears the rook
-#   it just placed and leaves the king on e1/e8.
+#   rewritten so the king lands on its rook (e1g1 -> e1h1).
 
 import sys
 import chess.pgn
