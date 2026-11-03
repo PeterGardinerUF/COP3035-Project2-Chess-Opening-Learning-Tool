@@ -40,7 +40,10 @@ int main() {
         if (input.endProgram) {
             break;
         } else if (input.boardModified) {
-            // RT
+            if (!input.lastMove.empty()) {
+                moves.push_back(input.lastMove);
+                input.lastMove.clear();
+            }
             if (input.usingTrie == true) {
                 vector<TrieNode> nodes = trie.returnNMoves(moves);
                 for (unsigned int i = 0; i < 3 && i < nodes.size(); i++) {
