@@ -46,14 +46,20 @@ int main() {
             }
             if (input.usingTrie == true) {
                 vector<TrieNode> nodes = trie.returnNMoves(moves);
-                for (unsigned int i = 0; i < 3 && i < nodes.size(); i++) {
-                    Continuation continuation = GetContinuationFromTokenUCI(nodes[i].move);
-                    renderer.continuations[i].continuation = continuation;
-                    renderer.continuations[i].whiteWins = nodes[i].whiteWins;
-                    renderer.continuations[i].whiteWins = nodes[i].blackWins;
-                    renderer.continuations[i].whiteWins = nodes[i].draws;
-                    renderer.continuations[i].exists = true;
+                for (unsigned int i = 0; i < 3; i++) {
+                    if (i < nodes.size()) {
+                        Continuation continuation = GetContinuationFromTokenUCI(nodes[i].move);
+                        renderer.continuations[i].continuation = continuation;
+                        renderer.continuations[i].whiteWins = nodes[i].whiteWins;
+                        renderer.continuations[i].blackWins = nodes[i].blackWins;
+                        renderer.continuations[i].draws = nodes[i].draws;
+                        renderer.continuations[i].exists = true;
+                    }
+                    else {
+                        renderer.continuations[i].exists = false;
+                    }
                 }
+                renderer.boardDataExists = !nodes.empty();
                 
             } else {
                 BoardData data;
