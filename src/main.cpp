@@ -59,7 +59,15 @@ int main() {
                         renderer.continuations[i].exists = false;
                     }
                 }
-                renderer.boardDataExists = !nodes.empty();
+                int currentIndex = trie.find(moves);
+                if (currentIndex != -1) {
+                    BoardData data;
+                    data.whiteWins = trie.nodes[currentIndex].whiteWins;
+                    data.blackWins = trie.nodes[currentIndex].blackWins;
+                    data.draws = trie.nodes[currentIndex].draws;
+                    renderer.boardData = data;
+                }
+                renderer.boardDataExists = (currentIndex != -1);
                 
             } else {
                 BoardData data;
