@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <string>
 #include "raylib.h"
 #include "board.hpp"
 #include "move_popup.hpp"
@@ -19,6 +20,7 @@ typedef struct {
     int selectedX;
     int selectedY;
     Piece toPlace;
+    string lastMove;
 } Input;
 
 typedef struct {
