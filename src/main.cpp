@@ -33,13 +33,15 @@ int main() {
     HashMap hashMap;
     hashMap.InsertFileUCI(GAMES_FILE);
     vector<string> moves;
-
+    
+    bool startup = true;
     while (!WindowShouldClose()) {
         
         HandleInput(board, input, BOARD_SIZE_PIXELS);
         if (input.endProgram) {
             break;
-        } else if (input.boardModified) {
+        } else if (input.boardModified || startup) {
+            startup = false;
             if (!input.lastMove.empty()) {
                 moves.push_back(input.lastMove);
                 input.lastMove.clear();
