@@ -10,6 +10,7 @@ inline string SquareName(int x, int y) {
     string s;
     s += static_cast<char>('a' + x);
     s += static_cast<char>('1' + y);
+    return s;
 }
 
 // Returns a string representing a move in UCI notation, given its start and end coordinates
