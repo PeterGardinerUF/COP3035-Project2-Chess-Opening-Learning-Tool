@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include "uci_move.hpp"
 
 Input InitialInput() {
     return (Input) {
@@ -68,6 +69,7 @@ void HandleInput(Board& board, Input& input, int boardSizePixels) {
                     Piece piece = board.pieces[input.selectedX][input.selectedY];
                     Piece captured = board.pieces[clickedX][clickedY];
                     NoteMove(input.selectedX, input.selectedY, clickedX, clickedY, piece, captured);
+                    input.lastMove = MakeUCIMove(input.selectedX, input.selectedY, clickedX, clickedY);
                     board.pieces[input.selectedX][input.selectedY] = EMPTY;
                     board.pieces[clickedX][clickedY] = piece;
                     board.whiteToPlay = !board.whiteToPlay;
