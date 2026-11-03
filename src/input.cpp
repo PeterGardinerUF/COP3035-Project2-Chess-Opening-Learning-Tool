@@ -22,6 +22,7 @@ bool IsMouseOver(Button button, Vector2 mousePosition) {
 
 void HandleInput(Board& board, Input& input, int boardSizePixels) {
     input.boardModified = false;
+    input.lastMove.clear();
     
     Button boardButton = {
         .x = 0,
