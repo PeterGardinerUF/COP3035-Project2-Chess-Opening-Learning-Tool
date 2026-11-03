@@ -57,7 +57,6 @@ public:
 
     // Finds the index of the last move in the sequence if it exists, otherwise returns -1
     int find(const vector<string>& moves) const {
-        if (moves.empty()) return 0;
         int current = 0;
         for (const string& move : moves) {
             current = step(current, move);
