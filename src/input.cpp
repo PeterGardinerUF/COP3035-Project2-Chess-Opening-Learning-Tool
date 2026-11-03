@@ -10,6 +10,7 @@ Input InitialInput() {
         .selectedX = 0,
         .selectedY = 0,
         .toPlace = EMPTY,
+        .lastMove = "",
     };
 }
 
