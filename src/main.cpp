@@ -63,10 +63,19 @@ int main() {
                 }
                 int currentIndex = trie.find(moves);
                 if (currentIndex != -1) {
-                    BoardData data;
-                    data.whiteWins = trie.nodes[currentIndex].whiteWins;
-                    data.blackWins = trie.nodes[currentIndex].blackWins;
-                    data.draws = trie.nodes[currentIndex].draws;
+                    BoardData data = {};
+                    if (currentIndex == 0) {
+                        for (int c : trie.nodes[0].children) {
+                            data.whiteWins += trie.nodes[c].whiteWins;
+                            data.blackWins += trie.nodes[c].blackWins;
+                            data.draws += trie.nodes[c].draws;
+                        }
+                    }
+                    else {
+                        data.whiteWins = trie.nodes[currentIndex].whiteWins;
+                        data.blackWins = trie.nodes[currentIndex].blackWins;
+                        data.draws = trie.nodes[currentIndex].draws;
+                    }
                     renderer.boardData = data;
                 }
                 renderer.boardDataExists = (currentIndex != -1);
