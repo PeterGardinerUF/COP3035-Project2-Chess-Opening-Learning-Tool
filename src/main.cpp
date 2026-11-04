@@ -36,7 +36,7 @@ int main() {
     
     bool startup = true;
     while (!WindowShouldClose()) {
-        
+        bool prevUsingTrie = input.usingTrie;
         HandleInput(board, input, BOARD_SIZE_PIXELS);
         if (input.endProgram) {
             break;
@@ -47,6 +47,10 @@ int main() {
                 input.lastMove.clear();
             }
             if (input.usingTrie == true) {
+                if (!prevUsingTrie) {
+                    moves.clear();
+                    prevUsingTrie = true;
+                }
                 vector<TrieNode> nodes = trie.returnNMoves(moves);
                 for (unsigned int i = 0; i < 3; i++) {
                     if (i < nodes.size()) {
