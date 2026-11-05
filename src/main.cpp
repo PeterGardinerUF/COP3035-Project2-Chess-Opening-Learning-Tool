@@ -7,8 +7,8 @@
 // g++ src/*.cpp -o build/debug.exe -Wall -Wextra -g -IC:/raylib/raylib/src -LC:/raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
 
 const string GAMES_FILE = "Data/games.txt";
-const int MAX_GAMES = 1000000; // Number of games to load
-const int MAX_PLY = 8; // Number of half-moves deep to store (2 ply: e2e4 e7e5)
+const int MAX_GAMES = 5000000; // Number of games to load
+const int MAX_PLY = 30; // Number of half-moves deep to store (2 ply: e2e4 e7e5)
 
 int main() {
 
